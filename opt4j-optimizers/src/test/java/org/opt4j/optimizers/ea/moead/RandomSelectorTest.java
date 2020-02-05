@@ -70,6 +70,18 @@ public class RandomSelectorTest {
 		assertNotEquals(result.get(1), null);
 		assertEquals(result.get(0), Integer.valueOf(neighbourhood[0]));
 		assertEquals(result.get(1), Integer.valueOf(neighbourhood[1]));
+
+		neighbourhood = new int[] { 4, 3, 2, 1 };
+		result.clear();
+		result = rs.selectParents(neighbourhood, 4);
+		assertNotEquals(result.get(0), null);
+		assertNotEquals(result.get(1), null);
+		assertNotEquals(result.get(2), null);
+		assertNotEquals(result.get(3), null);
+		assertEquals(result.get(0), Integer.valueOf(neighbourhood[0]));
+		assertEquals(result.get(1), Integer.valueOf(neighbourhood[1]));
+		assertEquals(result.get(2), Integer.valueOf(neighbourhood[2]));
+		assertEquals(result.get(3), Integer.valueOf(neighbourhood[3]));
 	}
 
 	@Test
