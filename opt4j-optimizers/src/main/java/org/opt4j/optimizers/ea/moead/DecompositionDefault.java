@@ -22,27 +22,34 @@
 package org.opt4j.optimizers.ea.moead;
 
 import java.util.List;
+import com.google.inject.Inject;
 
+/**
+ * The default implementation for the Decomposition interface
+ * As default we use a MSS-R selection.
+ * (Deb K., Bandaru S., Seada H. (2019) Generating Uniformly Distributed Points on a Unit Simplex for Evolutionary Many-Objective Optimization.
+ *  In: Deb K. et al. (eds) Evolutionary Multi-Criterion Optimization. EMO 2019. Lecture Notes in Computer Science, vol 11411. Springer, Cham)
+ * @author Christian Vögl
+*/
 public class DecompositionDefault implements Decomposition {
 
-    /*
-     * As default we use a MSS-R selection.
-     * (Deb K., Bandaru S., Seada H. (2019) Generating Uniformly Distributed Points on a Unit Simplex for Evolutionary Many-Objective Optimization.
-     *  In: Deb K. et al. (eds) Evolutionary Multi-Criterion Optimization. EMO 2019. Lecture Notes in Computer Science, vol 11411. Springer, Cham)
-	 * @param N
-	 *            the number of subproblems (number of weight vectors)
-	 * @param m
-     *            the numbe of objectives (number of entries per weight vector)
-	 * @return the weight vectors
-    */
+    // controlls how many Vectors to create with the SimplexFill for each Vector
+    // that gets selected by the selection
+    protected  int overfill = 50;
     @Override
+/**
+ * @param N
+ *            the number of subproblems (number of weight vectors)
+ * @param m
+ *            the numbe of objectives (number of entries per weight vector)
+ * @return the weight vectors
+ */
     public List<WeightVector> decompose (int N, int m)
     {
         SimplexFill fill = new SimplexFillRandom();
-        List<WeightVector> initial = fill.fill(100*N, m); //TODO: wild guess
+        List<WeightVector> initial = fill.fill(overfill*N, m);
         Selection select = new MaximallySparseSelection();
         return select.select(initial, N);
-
     }
 
 }

@@ -20,14 +20,25 @@
  * SOFTWARE.
  *******************************************************************************/
 
- package org.opt4j.optimizers.ea.moead;
+package org.opt4j.optimizers.ea.moead;
 
 import java.util.List;
+import com.google.inject.ImplementedBy;
 
+
+/*
+*
+* The @link{Selection} interface to select WeightVectors on a Simplex.
+* Used for the decomposition
+* @author Christian Vögl
+*/
+@ImplementedBy(MaximallySparseSelection.class)
 interface Selection
  {  /*
-    Selectts N WeightVectors from the initial list.
-    Also possibly adds some points not contained in initial to the output (mostly extreme values)
+      Creats an selection of WeightVectors from an initial population
+      @param initial The list of WeightVectors to select from
+      @param N The number of vectors to select
+      @return The list of selected Vectors
     */
      List<WeightVector> select(List<WeightVector> initial,int  N);
  }

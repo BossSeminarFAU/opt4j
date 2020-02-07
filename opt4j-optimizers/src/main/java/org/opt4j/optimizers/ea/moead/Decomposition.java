@@ -31,9 +31,9 @@ import com.google.inject.ImplementedBy;
 
 /**
  * The {@link Decompostition} interface is used to create weight vectors.
- * 
- * @author 
- * 
+ *
+ * @author Christian Vögl
+ *
  */
 @ImplementedBy(DecompositionDefault.class)
 public interface Decomposition {

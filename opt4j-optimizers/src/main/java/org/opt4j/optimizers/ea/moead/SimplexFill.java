@@ -23,11 +23,17 @@
  package org.opt4j.optimizers.ea.moead;
 
 import java.util.List;
+import com.google.inject.ImplementedBy;
 
+
+@ImplementedBy(SimplexFillRandom.class)
 interface SimplexFill
  {
-     /*
+    /*
      * Fills a m dimensional unit simplex with N vectors
+     * @param N The number of vectors
+     * @param m the dimension of the simplex
+     * @return A list of the created Vectors
      */
      List<WeightVector> fill(int N, int m);
  }

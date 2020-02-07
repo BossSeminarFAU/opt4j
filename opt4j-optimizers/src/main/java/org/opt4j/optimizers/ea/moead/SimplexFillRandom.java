@@ -26,19 +26,22 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.opt4j.core.common.random.RandomMersenneTwister;
 
+
+/**
+* Fills a unit simplex of dimension m with N points, selected after Fig. 1 in
+* A. Jaszkiewicz, "On the performance of multiple-objective genetic local
+* search on the 0/1 knapsack problem - a comparative experiment," in IEEE
+* Transactions on Evolutionary Computation, vol. 6, no. 4, pp. 402-412, Aug.
+* 2002.
+* @author Christian Vögl
+*/
 class SimplexFillRandom implements SimplexFill {
-    /*
-     * Fills a unit simplex of dimension m with N points, selected after Fig. 1 in
-     * A. Jaszkiewicz, "On the performance of multiple-objective genetic local
-     * search on the 0/1 knapsack problem - a comparative experiment," in IEEE
-     * Transactions on Evolutionary Computation, vol. 6, no. 4, pp. 402-412, Aug.
-     * 2002.
-     */
     private Random rand;
 
     public SimplexFillRandom() {
-        rand = new Random();
+        rand =  new RandomMersenneTwister(0);
     }
     @Override
     public List<WeightVector> fill (int N, int m)

@@ -26,7 +26,11 @@ package org.opt4j.optimizers.ea.moead;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+* The {@link MaximallySparseSelection} implements a selection, where each new vector maximizes the sum 
+* of distances to all previously selected vectors.
+* @author Christian Vögl
+*/
 class MaximallySparseSelection implements Selection
 {
     private double distance(WeightVector i, WeightVector j)
@@ -64,6 +68,16 @@ class MaximallySparseSelection implements Selection
         }
         return M;
     }
+    /**
+    * This function fills a list with the extrema of an n-dimensional simplex,
+    * and adds points from the initial that maximises the sum of distances
+    * to the previously selected vectors
+    *
+    * @param initial the list of WeightVectors to select from
+    *
+    * @param N the number of weightVectors to return
+    * @return a list with the extrema of the simplex and the selected WeightVectors
+    */
     @Override
     public List<WeightVector> select(List<WeightVector> initial, int N){
         List<WeightVector> result = new ArrayList<>();
