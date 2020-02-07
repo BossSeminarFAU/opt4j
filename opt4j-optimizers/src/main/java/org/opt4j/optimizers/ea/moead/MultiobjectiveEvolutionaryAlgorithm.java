@@ -97,12 +97,18 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 	 * 
 	 * @param population
 	 *            the population
+	 * @param individualFactory
+	 *            the individual factory
+	 * @param completer
+	 *            the completer
 	 * @param selector
 	 *            the selector
 	 * @param mating
 	 *            the mating method
 	 * @param decomposition
 	 * 			  the decomposition method
+	 * @param neighborhoodCreation
+	 * 			  the neighborhood-creation method
 	 * @param repair
 	 * 			  the repair method
 	 * @param m
@@ -111,6 +117,8 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 	 *            the number of subproblems
 	 * @param t
 	 *            the number of weight vectors in the neighborhood
+	 * @param numberOfParents
+	 * 			  the number of parents from which to create new individuals
 	 * @param newIndividuals
 	 * 			  the number of new Individuals created by the mating method
 	 */
@@ -212,13 +220,13 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 			
 			// Step 2.2) Improvement
 			while(iter.hasNext()){
-				// System.out.println(offspring.iterator().hasNext());
 				Individual toCheck = iter.next();
 				if(toCheck.getObjectives().weaklyDominates(best.getObjectives()))
 					best = toCheck;
 			}
 
 			best = repair.repairSolution(best);
+
 			// Step 2.4) Update of Neighboring Solutions
 			Objectives objectives = best.getObjectives();
 			for(int j = 0; j < t; j++){
