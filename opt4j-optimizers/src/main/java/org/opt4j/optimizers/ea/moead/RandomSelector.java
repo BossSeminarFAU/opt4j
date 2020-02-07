@@ -1,6 +1,5 @@
 package org.opt4j.optimizers.ea.moead;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,18 +15,17 @@ public class RandomSelector implements Selector {
 		assertIsValidArray(neighbourhood);
 
 		int neighbourhoodSize = neighbourhood.length;
-		List<Integer> parents = new ArrayList<>();
+		List<Integer> parents = null;
 
 		assertIsValidNumberOfParents(numberOfParents, neighbourhoodSize);
 
-		if (neighbourhoodSize == numberOfParents) {
-			parents.add(neighbourhood[0]);
-			parents.add(neighbourhood[1]);
-		} else {
-			// First copy all int[] entries into collection
-			List<Integer> convertedList = IntStream.of(neighbourhood).boxed().collect(Collectors.toList());
+		// Copy all int[] entries into collection
+		List<Integer> convertedList = IntStream.of(neighbourhood).boxed().collect(Collectors.toList());
 
-			// then shuffle list and pick correct amount
+		if (neighbourhoodSize == numberOfParents) {
+			parents = convertedList;
+		} else {
+			// Shuffle list and pick correct amount
 			Collections.shuffle(convertedList);
 			parents = convertedList.subList(0, numberOfParents);
 		}
