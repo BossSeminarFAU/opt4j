@@ -52,11 +52,11 @@ import com.google.inject.Inject;
  */
 public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 
-	protected final int m;
+	protected final int numObjectives;
 
-	protected final int n;
+	protected final int numProblems;
 
-	protected final int t;
+	protected final int neighborhoodSize;
 
 	protected final int numberOfParents;
 
@@ -111,11 +111,11 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 	 * 			  the neighborhood-creation method
 	 * @param repair
 	 * 			  the repair method
-	 * @param m
+	 * @param numObjectives
 	 * 			  the number of objective functions	and entries of a weight vector
-	 * @param n
+	 * @param numProblems
 	 *            the number of subproblems
-	 * @param t
+	 * @param neighborhoodSize
 	 *            the number of weight vectors in the neighborhood
 	 * @param numberOfParents
 	 * 			  the number of parents from which to create new individuals
@@ -132,9 +132,9 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 			Decomposition decomposition,
 			NeighborhoodCreation neighborhoodCreation,
 			Repair repair,
-			@Constant(value = "m", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int m,
-			@Constant(value = "n", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int n,
-			@Constant(value = "t", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int t,
+			@Constant(value = "numObjectives", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int numObjectives,
+			@Constant(value = "numProblems", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int numProblems,
+			@Constant(value = "neighborhoodSize", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int neighborhoodSize,
 			@Constant(value = "numberOfParents", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int numberOfParents,
 			@Constant(value = "newIndividuals", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int newIndividuals ) {
 		this.selector = selector;
@@ -144,21 +144,21 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 		this.decomposition = decomposition;
 		this.neighborhoodCreation = neighborhoodCreation;
 		this.repair = repair;
-		this.m = m;
-		this.n = n;
-		this.t = t;
+		this.numObjectives = numObjectives;
+		this.numProblems = numProblems;
+		this.neighborhoodSize = neighborhoodSize;
 		this.numberOfParents = numberOfParents;
 		this.newIndividuals = newIndividuals;
 		this.population = population;
 
-		if (m <= 0) {
-			throw new IllegalArgumentException("Invalid m: " + m);
+		if (numObjectives <= 0) {
+			throw new IllegalArgumentException("Invalid numObjectives: " + numObjectives);
 		}
-		if (n <= 0) {
-			throw new IllegalArgumentException("Invalid N: " + n);
+		if (numProblems <= 0) {
+			throw new IllegalArgumentException("Invalid N: " + numProblems);
 		}
-		if (t <= 0) {
-			throw new IllegalArgumentException("Invalid T: " + t);
+		if (neighborhoodSize <= 0) {
+			throw new IllegalArgumentException("Invalid T: " + neighborhoodSize);
 		}
 		if (newIndividuals <= 0) {
 			throw new IllegalArgumentException("Invalid newIndividuals: " + newIndividuals);
@@ -176,23 +176,23 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 	 */
 	@Override
 	public void initialize() {
-		weights = decomposition.decompose(n, m);
+		weights = decomposition.decompose(numProblems, numObjectives);
 		
-		// Step 1.1
+		// Step 1.1 create an empty popullation
 		externalPopulation = new UnboundedArchive();
 
-		// Step 1.2
-		neighborhoods = new ArrayList<>(n);
-		for( int i = 0; i < n; i++){
-			neighborhoods.add(neighborhoodCreation.create(weights.get(i), weights, t));
+		// Step 1.2 create neighborhoods
+		neighborhoods = new ArrayList<>(numProblems);
+		for( int i = 0; i < numProblems; i++){
+			neighborhoods.add(neighborhoodCreation.create(weights.get(i), weights, neighborhoodSize));
 		}
 
-		// Step 1.3
-		while (population.size() < n) {
+		// Step 1.3 create an initial population
+		while (population.size() < numProblems) {
 			population.add(individualFactory.create());
 		}
 			
-		x = new Individual[n];
+		x = new Individual[numProblems];
 		x = population.toArray(x);
 		
 	}
@@ -204,41 +204,50 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 	 */
 	@Override
 	public void next() throws TerminationException {
-		completer.complete(population);	
-		for( int i = 0; i < n; i++) {
+		// Evaluate the population
+		completer.complete(population);
+
+		// create a new individual for every neighborhood
+		for( int i = 0; i < numProblems; i++) {
 			// Step 2.1) Reproduction
+			// Select random parents from current neighborhood
 			List<Integer> parents = selector.selectParents(neighborhoods.get(i), numberOfParents);
 			List<Individual> parentCollection = new ArrayList<>(parents.size());
 			for(int j = 0; j < parents.size(); j++){
 				parentCollection.add(x[parents.get(j)]);
 			}
 			
+			// Create new individuals from the chosen parents
 			Collection<Individual> offspring = mating.getOffspring( newIndividuals , parentCollection);
 			completer.complete(offspring);
 			Iterator<Individual> iter = offspring.iterator();
 			Individual best = iter.next();
 			
-			// Step 2.2) Improvement
+			// find the best offspring
 			while(iter.hasNext()){
 				Individual toCheck = iter.next();
 				if(toCheck.getObjectives().weaklyDominates(best.getObjectives()))
 					best = toCheck;
 			}
-
+	
+			// Step 2.2) Improvement
+			// repair offspring
 			best = repair.repairSolution(best);
 
 			// Step 2.4) Update of Neighboring Solutions
+			// check if offspring dominates neighboring individuals
 			Objectives objectives = best.getObjectives();
-			for(int j = 0; j < t; j++){
+			for(int j = 0; j < neighborhoodSize; j++){
 				Individual toCheck = x[ neighborhoods.get(i)[j] ];
 				if(objectives.weaklyDominates(toCheck.getObjectives() )){
+					// Update the dominated individuals
 					x[ neighborhoods.get(i)[j] ] = best;
 					population.remove(toCheck);
 					population.add(best);
 				}
 			}
 
-			// Step 2.5) Update of EP
+			// Step 2.5) Update of the external Population
 			externalPopulation.update(best);
 		}
 	}

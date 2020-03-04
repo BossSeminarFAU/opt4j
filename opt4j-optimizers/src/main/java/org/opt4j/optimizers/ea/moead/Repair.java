@@ -25,13 +25,18 @@ package org.opt4j.optimizers.ea.moead;
 import org.opt4j.core.Individual;
 import com.google.inject.ImplementedBy;
 
+/**{@link Repair} repairs faulty individuals with regards to their objectives.
+ * 
+ * @author Johannes-Sebastian See 
+*/
 @ImplementedBy(DefaultRepair.class)
 public interface Repair {
 
-    /* Repairs and improves an Individual regarding its objectives
+    /* Repairs an individual to make it evaluable
     *
-    * @param solution The Individual to improve
-    * @return the improved Individual
+    * @param solution 
+    *           the individual to repair
+    * @return the repaired individual
     */
     public Individual repairSolution(Individual solution);
 }
