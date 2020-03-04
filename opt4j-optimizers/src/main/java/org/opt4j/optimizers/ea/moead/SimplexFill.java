@@ -25,15 +25,19 @@
 import java.util.List;
 import com.google.inject.ImplementedBy;
 
-
+/**
+ * The {@link SimplexFill} fills a unit simplex with WeightVectors
+ *
+ * @author Christian Vögl
+ */
 @ImplementedBy(SimplexFillRandom.class)
 interface SimplexFill
  {
     /*
-     * Fills a m dimensional unit simplex with N vectors
-     * @param N The number of vectors
-     * @param m the dimension of the simplex
+     * Fills a numObjectives dimensional unit simplex with numSubproblems vectors
+     * @param numSubproblems The number of vectors
+     * @param numObjectives the dimension of the simplex
      * @return A list of the created Vectors
      */
-     List<WeightVector> fill(int N, int m);
+     List<WeightVector> fill(int numSubproblems, int numObjectives);
  }

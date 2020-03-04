@@ -39,12 +39,12 @@ import com.google.inject.ImplementedBy;
 public interface Decomposition {
 
     /*
-	 * @param N
+	 * @param numProblems
 	 *            the number of subproblems (number of weight vectors)
-	 * @param m
-     *            the numbe of objectives (number of entries per weight vector)
+	 * @param numObjectives
+     *            the number of objectives (number of entries per weight vector)
 	 * @return the weight vectors
     */
-    public List<WeightVector> decompose (int N, int m);
+    public List<WeightVector> decompose (int numProblems, int numObjectives);
 
 }

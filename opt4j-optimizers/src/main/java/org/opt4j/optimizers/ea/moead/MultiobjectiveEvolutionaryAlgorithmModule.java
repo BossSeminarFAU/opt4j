@@ -30,6 +30,7 @@ import org.opt4j.core.optimizer.OptimizerModule;
 import org.opt4j.core.start.Constant;
 
 import org.opt4j.optimizers.ea.CrossoverRate;
+import org.opt4j.optimizers.ea.EvolutionaryAlgorithmModule.CrossoverRateType;
 import org.opt4j.optimizers.ea.ConstantCrossoverRate;
 
 /**
@@ -48,20 +49,20 @@ public class MultiobjectiveEvolutionaryAlgorithmModule extends OptimizerModule {
 	@MaxIterations
 	protected int generations = 100;
 
-	@Constant(value = "m", namespace = MultiobjectiveEvolutionaryAlgorithm.class)
+	@Constant(value = "numObjectives", namespace = MultiobjectiveEvolutionaryAlgorithm.class)
 	@Info("The number of objectives per subproblem")
 	@Order(1)
-	protected int m = 5;
+	protected int numObjectives = 5;
 
-	@Constant(value = "n", namespace = MultiobjectiveEvolutionaryAlgorithm.class)
+	@Constant(value = "numProblems", namespace = MultiobjectiveEvolutionaryAlgorithm.class)
 	@Info("The number of the subproblems considered.")
 	@Order(2)
-	protected int n = 10;
+	protected int numProblems = 10;
 
-	@Constant(value = "t", namespace = MultiobjectiveEvolutionaryAlgorithm.class)
+	@Constant(value = "neighborhoodSize", namespace = MultiobjectiveEvolutionaryAlgorithm.class)
 	@Info("The number of the weight vectors in the neighborhood.")
 	@Order(3)
-	protected int t = 10;
+	protected int neighborhoodSize = 10;
 
 	@Constant(value = "numberOfParents", namespace = MultiobjectiveEvolutionaryAlgorithm.class)
 	@Info("The number of Parents from which the new individual will be created from.")
@@ -81,20 +82,6 @@ public class MultiobjectiveEvolutionaryAlgorithmModule extends OptimizerModule {
 	
 	@Ignore
 	protected CrossoverRateType crossoverRateType = CrossoverRateType.CONSTANT;
-	
-	/**
-	 * The {@link CrossoverRateType} allows to choose between different types of
-	 * crossover rates.
-	 * 
-	 * @author glass
-	 * 
-	 */
-	public enum CrossoverRateType {
-		/**
-		 * Use a constant crossover rate.
-		 */
-		CONSTANT;
-	}
 
 	/**
 	 * Returns the number of generations.
@@ -117,22 +104,22 @@ public class MultiobjectiveEvolutionaryAlgorithmModule extends OptimizerModule {
 	}
 
 	/**
-	 * Returns The number of objectives per subproblem {@code m}.
+	 * Returns The number of objectives per subproblem {@code numObjectives}.
 	 * 
 	 * @return The number of objectives per subproblem
 	 */
-	public int getM() {
-		return m;
+	public int getNumObjectives() {
+		return numObjectives;
 	}
 
 	/**
-	 * Sets the number of objectives per subproblem {@code m}.
+	 * Sets the number of objectives per subproblem {@code numObjectives}.
 	 * 
-	 * @param m
+	 * @param numObjectives
 	 *            The number of objectives per subproblem
 	 */
-	public void setM(int m) {
-		this.m = m;
+	public void setNumObjectives(int numObjectives) {
+		this.numObjectives = numObjectives;
 	}
 	
 	/**
@@ -140,17 +127,17 @@ public class MultiobjectiveEvolutionaryAlgorithmModule extends OptimizerModule {
 	 * 
 	 * @return the number of subproblems
 	 */
-	public int getN() {
-		return n;
+	public int getNumProblems() {
+		return numProblems;
 	}
 
 	/**
 	 * Sets the number of subproblems.
 	 * 
-	 * @param N the number of subproblems
+	 * @param numProblems the number of subproblems
 	 */
-	public void setN(int n) {
-		this.n = n;
+	public void setNumProblems(int numProblems) {
+		this.numProblems = numProblems;
 	}
 
 	
@@ -160,18 +147,18 @@ public class MultiobjectiveEvolutionaryAlgorithmModule extends OptimizerModule {
 	 * 
 	 * @return The number of the weight vectors in the neighborhood
 	 */
-	public int getT() {
-		return t;
+	public int getNeighborhoodSize() {
+		return neighborhoodSize;
 	}
 
 	/**
 	 * Sets the number of weight vectors {@code T}.
 	 * 
-	 * @param T
+	 * @param neighborhoodSize
 	 *            The number of the weight vectors
 	 */
-	public void setT(int t) {
-		this.t = t;
+	public void setNeighborhoodSize(int neighborhoodSize) {
+		this.neighborhoodSize = neighborhoodSize;
 	}
 
 	/**

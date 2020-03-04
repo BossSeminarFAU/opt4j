@@ -25,6 +25,13 @@ package org.opt4j.optimizers.ea.moead;
 import java.util.List;
 import com.google.inject.ImplementedBy;
 
+/**
+ * 
+ * The {@link Selector} interface to select parents from a provided neighbourhood list.
+ * 
+ * @author Ufuk Altiparmakoglu
+ *
+ */
 @ImplementedBy(RandomSelector.class)
 public interface Selector {
 
@@ -34,7 +41,7 @@ public interface Selector {
      * @param neighbourhood - the indices of the neighbourhood array
      * @param numberOfParents - the number of parents
      * 
-     * @return collection of parents
+     * @return collection of parent indices
      * */ 
     public List<Integer> selectParents(int[] neighbourhood, int numberOfParents);
 }
