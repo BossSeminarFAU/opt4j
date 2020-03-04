@@ -38,18 +38,18 @@ public class DecompositionDefault implements Decomposition {
     protected  int overfill = 50;
     @Override
 /**
- * @param N
+ * @param numProblems
  *            the number of subproblems (number of weight vectors)
- * @param m
+ * @param numObjectives
  *            the numbe of objectives (number of entries per weight vector)
  * @return the weight vectors
  */
-    public List<WeightVector> decompose (int N, int m)
+    public List<WeightVector> decompose (int numProblems, int numObjectives)
     {
         SimplexFill fill = new SimplexFillRandom();
-        List<WeightVector> initial = fill.fill(overfill*N, m);
+        List<WeightVector> initial = fill.fill(overfill*N, numObjectives);
         Selection select = new MaximallySparseSelection();
-        return select.select(initial, N);
+        return select.select(initial, numProblems);
     }
 
 }
