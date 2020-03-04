@@ -73,9 +73,14 @@ public class MOEADModule extends OptimizerModule {
 	@Info("The number of new solutions per iteration")
 	@Order(5)
 	protected int newIndividuals = 1;
+	
+	@Constant(value = "overfill", namespace = MOEAD.class)
+	@Info("TODO")
+	@Order(5)
+	protected int overfill = 10;
 
 	@Info("Performs a crossover operation with this given rate.")
-	@Order(6)
+	@Order(7)
 	@Constant(value = "rate", namespace = ConstantCrossoverRate.class)
 	protected double crossoverRate = 0.95;
 
@@ -197,6 +202,25 @@ public class MOEADModule extends OptimizerModule {
 	 */
 	public void setnewIndividuals(int newIndividuals) {
 		this.newIndividuals = newIndividuals;
+	}
+
+	/**
+	 * Returns The overfill {@code overfill}.
+	 * 
+	 * @return The overfill
+	 */
+	public int getoverfill() {
+		return overfill;
+	}
+
+	/**
+	 * Sets the overfill {@code newIndividuals}.
+	 * 
+	 * @param newIndividuals
+	 *            The overfill
+	 */
+	public void setoverfill(int overfill) {
+		this.overfill = overfill;
 	}
 	
 	/**

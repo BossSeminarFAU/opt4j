@@ -61,6 +61,8 @@ public class MOEAD implements IterativeOptimizer {
 	protected final int numberOfParents;
 
 	protected final int newIndividuals;
+	
+	protected final int overfill;
 
 	private final IndividualFactory individualFactory;
 
@@ -136,7 +138,8 @@ public class MOEAD implements IterativeOptimizer {
 			@Constant(value = "numProblems", namespace = MOEAD.class) int numProblems,
 			@Constant(value = "neighborhoodSize", namespace = MOEAD.class) int neighborhoodSize,
 			@Constant(value = "numberOfParents", namespace = MOEAD.class) int numberOfParents,
-			@Constant(value = "newIndividuals", namespace = MOEAD.class) int newIndividuals ) {
+			@Constant(value = "newIndividuals", namespace = MOEAD.class) int newIndividuals, 
+			@Constant(value = "overfill", namespace = MOEAD.class) int overfill) {
 		this.selector = selector;
 		this.individualFactory = individualFactory;
 		this.completer = completer;
@@ -150,6 +153,7 @@ public class MOEAD implements IterativeOptimizer {
 		this.numberOfParents = numberOfParents;
 		this.newIndividuals = newIndividuals;
 		this.population = population;
+		this.overfill = overfill;
 
 		if (numObjectives <= 0) {
 			throw new IllegalArgumentException("Invalid numObjectives: " + numObjectives);
@@ -176,7 +180,7 @@ public class MOEAD implements IterativeOptimizer {
 	 */
 	@Override
 	public void initialize() {
-		weights = decomposition.decompose(numProblems, numObjectives);
+		weights = decomposition.decompose(numProblems, numObjectives); // TODO: Add overfill
 		
 		// Step 1.1 create an empty popullation
 		externalPopulation = new UnboundedArchive();
