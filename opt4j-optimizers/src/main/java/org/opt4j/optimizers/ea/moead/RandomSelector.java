@@ -5,6 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * 
+ * The {@link RandomSelector} provides functionality to select random parents
+ * from a neighbourhood list. 
+ * 
+ * @author Ufuk Altiparmakoglu
+ *
+ */
 public class RandomSelector implements Selector {
 
 	/**
@@ -12,12 +20,12 @@ public class RandomSelector implements Selector {
 	 */
 	@Override
 	public List<Integer> selectParents(int[] neighbourhood, int numberOfParents) {
-		assertIsValidArray(neighbourhood);
+		checkIsValidNumberOfParents(neighbourhood);
 
 		int neighbourhoodSize = neighbourhood.length;
 		List<Integer> parents = null;
 
-		assertIsValidNumberOfParents(numberOfParents, neighbourhoodSize);
+		checkIsValidNumberOfParents(numberOfParents, neighbourhoodSize);
 
 		// Copy all int[] entries into collection
 		List<Integer> convertedList = IntStream.of(neighbourhood).boxed().collect(Collectors.toList());
@@ -33,7 +41,7 @@ public class RandomSelector implements Selector {
 		return parents;
 	}
 
-	private void assertIsValidNumberOfParents(int numberOfParents, int neighbourhoodSize) {
+	private void checkIsValidNumberOfParents(int numberOfParents, int neighbourhoodSize) {
 		if (numberOfParents < 2) {
 			throw new IllegalArgumentException("Provided number of parents must be greater or equals 2!");
 		}
@@ -44,7 +52,7 @@ public class RandomSelector implements Selector {
 		}
 	}
 
-	private void assertIsValidArray(int[] neighbourhood) {
+	private void checkIsValidNumberOfParents(int[] neighbourhood) {
 		if (neighbourhood == null) {
 			throw new NullPointerException("Provided neighbourhood array is null!");
 		}
