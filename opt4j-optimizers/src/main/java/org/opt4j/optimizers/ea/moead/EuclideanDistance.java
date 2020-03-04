@@ -39,12 +39,12 @@ public class EuclideanDistance implements SimilarityMeasure {
      * @return the euclidean distance
      */
     public double calculateSimilarity(WeightVector v1, WeightVector v2){
-            if (v1.entries.length != v2.entries.length){
+            if (v1.size() != v2.size()){
                 throw new IllegalArgumentException("Can't compute euclidean distance of vectors with different dimensions");
             }
             double distanceSquared = 0;
-            for(int i = 0; i < v1.entries.length; i++){
-                distanceSquared += (v1.entries[i] - v2.entries[i]) * (v1.entries[i] - v2.entries[i]);
+            for(int i = 0; i < v1.size(); i++){
+                distanceSquared += (v1.get(i) - v2.get(i)) * (v1.get(i) - v2.get(i));
             }
             return Math.sqrt(distanceSquared);
     }

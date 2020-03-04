@@ -42,7 +42,7 @@ import static java.util.Map.Entry;
  */
 public class NeighborhoodCreation {
 
-    SimilarityMeasure sm;
+    private final SimilarityMeasure sm;
 
     public NeighborhoodCreation() {
         sm = new EuclideanDistance();

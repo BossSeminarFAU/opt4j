@@ -44,7 +44,7 @@ public class CosineSimilarity implements SimilarityMeasure {
      *      a lower value indicates a closer similarity
      */
     public double calculateSimilarity(WeightVector v1, WeightVector v2){
-            if (v1.entries.length != v2.entries.length){
+            if (v1.size() != v2.size()){
                 throw new IllegalArgumentException("Can't compute cosine similarity of vectors with different dimensions");
             }
             // in [-1, 1]
