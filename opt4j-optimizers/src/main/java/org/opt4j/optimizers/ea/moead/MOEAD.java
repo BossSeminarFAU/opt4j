@@ -42,7 +42,7 @@ import org.opt4j.core.common.archive.UnboundedArchive;
 import com.google.inject.Inject;
 
 /**
- * The {@link MultiobjectiveEvolutionaryAlgorithm} is an implementation of an Evolutionary
+ * The {@link MOEAD} is an implementation of an Evolutionary
  * Algorithm that uses {@link Decomposition} on a Multiobjective optimization Problem.
  * It is based on the ideas introduced in the paper 
  * "MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition" written by Qingfu Zhang and Hui Li.
@@ -50,7 +50,7 @@ import com.google.inject.Inject;
  * @author Johannes-Sebastian See
  * 
  */
-public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
+public class MOEAD implements IterativeOptimizer {
 
 	protected final int numObjectives;
 
@@ -123,7 +123,7 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 	 * 			  the number of new Individuals created by the mating method
 	 */
 	@Inject
-	public MultiobjectiveEvolutionaryAlgorithm(
+	public MOEAD(
 			Population population,
 			IndividualFactory individualFactory,
 			IndividualCompleter completer,
@@ -132,11 +132,11 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 			Decomposition decomposition,
 			NeighborhoodCreation neighborhoodCreation,
 			Repair repair,
-			@Constant(value = "numObjectives", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int numObjectives,
-			@Constant(value = "numProblems", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int numProblems,
-			@Constant(value = "neighborhoodSize", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int neighborhoodSize,
-			@Constant(value = "numberOfParents", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int numberOfParents,
-			@Constant(value = "newIndividuals", namespace = MultiobjectiveEvolutionaryAlgorithm.class) int newIndividuals ) {
+			@Constant(value = "numObjectives", namespace = MOEAD.class) int numObjectives,
+			@Constant(value = "numProblems", namespace = MOEAD.class) int numProblems,
+			@Constant(value = "neighborhoodSize", namespace = MOEAD.class) int neighborhoodSize,
+			@Constant(value = "numberOfParents", namespace = MOEAD.class) int numberOfParents,
+			@Constant(value = "newIndividuals", namespace = MOEAD.class) int newIndividuals ) {
 		this.selector = selector;
 		this.individualFactory = individualFactory;
 		this.completer = completer;
@@ -155,10 +155,10 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 			throw new IllegalArgumentException("Invalid numObjectives: " + numObjectives);
 		}
 		if (numProblems <= 0) {
-			throw new IllegalArgumentException("Invalid N: " + numProblems);
+			throw new IllegalArgumentException("Invalid numProblems: " + numProblems);
 		}
 		if (neighborhoodSize <= 0) {
-			throw new IllegalArgumentException("Invalid T: " + neighborhoodSize);
+			throw new IllegalArgumentException("Invalid neighborhoodSize: " + neighborhoodSize);
 		}
 		if (newIndividuals <= 0) {
 			throw new IllegalArgumentException("Invalid newIndividuals: " + newIndividuals);
@@ -193,8 +193,7 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 		}
 			
 		x = new Individual[numProblems];
-		x = population.toArray(x);
-		
+		x = population.toArray(x);		
 	}
 
 	/*
@@ -206,7 +205,6 @@ public class MultiobjectiveEvolutionaryAlgorithm implements IterativeOptimizer {
 	public void next() throws TerminationException {
 		// Evaluate the population
 		completer.complete(population);
-
 		// create a new individual for every neighborhood
 		for( int i = 0; i < numProblems; i++) {
 			// Step 2.1) Reproduction

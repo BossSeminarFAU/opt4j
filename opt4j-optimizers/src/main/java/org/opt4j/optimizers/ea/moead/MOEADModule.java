@@ -34,42 +34,42 @@ import org.opt4j.optimizers.ea.EvolutionaryAlgorithmModule.CrossoverRateType;
 import org.opt4j.optimizers.ea.ConstantCrossoverRate;
 
 /**
- * The {@link MultiobjectiveEvolutionaryAlgorithmModule} configures the
- * {@link MultiobjectiveEvolutionaryAlgorithm}.
+ * The {@link MOEADModule} configures the
+ * {@link MOEAD}.
  * 
  * @author Johannes-Sebastian See
  * 
  */
 
 @Info("Multi-Objective Evolutionary Algorithm")
-public class MultiobjectiveEvolutionaryAlgorithmModule extends OptimizerModule {
+public class MOEADModule extends OptimizerModule {
 
 	@Info("The number of generations.")
 	@Order(0)
 	@MaxIterations
-	protected int generations = 100;
+	protected int generations = 250;
 
-	@Constant(value = "numObjectives", namespace = MultiobjectiveEvolutionaryAlgorithm.class)
+	@Constant(value = "numObjectives", namespace = MOEAD.class)
 	@Info("The number of objectives per subproblem")
 	@Order(1)
 	protected int numObjectives = 5;
 
-	@Constant(value = "numProblems", namespace = MultiobjectiveEvolutionaryAlgorithm.class)
+	@Constant(value = "numProblems", namespace = MOEAD.class)
 	@Info("The number of the subproblems considered.")
 	@Order(2)
-	protected int numProblems = 10;
+	protected int numProblems = 20;
 
-	@Constant(value = "neighborhoodSize", namespace = MultiobjectiveEvolutionaryAlgorithm.class)
+	@Constant(value = "neighborhoodSize", namespace = MOEAD.class)
 	@Info("The number of the weight vectors in the neighborhood.")
 	@Order(3)
 	protected int neighborhoodSize = 10;
 
-	@Constant(value = "numberOfParents", namespace = MultiobjectiveEvolutionaryAlgorithm.class)
+	@Constant(value = "numberOfParents", namespace = MOEAD.class)
 	@Info("The number of Parents from which the new individual will be created from.")
 	@Order(4)
 	protected int numberOfParents = 2;
 
-	@Constant(value = "newIndividuals", namespace = MultiobjectiveEvolutionaryAlgorithm.class)
+	@Constant(value = "newIndividuals", namespace = MOEAD.class)
 	@Info("The number of new solutions per iteration")
 	@Order(5)
 	protected int newIndividuals = 1;
@@ -244,7 +244,7 @@ public class MultiobjectiveEvolutionaryAlgorithmModule extends OptimizerModule {
 	 */
 	@Override
 	public void config() {
-		bindIterativeOptimizer(MultiobjectiveEvolutionaryAlgorithm.class);
+		bindIterativeOptimizer(MOEAD.class);
 		bind(CrossoverRate.class).to(ConstantCrossoverRate.class).in(SINGLETON);
 	}
 }
