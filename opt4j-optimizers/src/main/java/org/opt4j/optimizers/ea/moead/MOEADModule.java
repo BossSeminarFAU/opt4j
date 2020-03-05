@@ -22,7 +22,7 @@
 
 package org.opt4j.optimizers.ea.moead;
 
-import static org.opt4j.core.config.annotations.Citation.PublicationMonth.DECEMBER;;
+import static org.opt4j.core.config.annotations.Citation.PublicationMonth.DECEMBER;
 
 import org.opt4j.core.config.annotations.Info;
 import org.opt4j.core.config.annotations.Citation;
@@ -91,7 +91,7 @@ public class MOEADModule extends OptimizerModule {
 	@Constant(value = "measure", namespace = MOEAD.class)
 	@Info("The measure for finding neighboring vectors.")
 	@Order(8)
-	protected SimilarityMeasures measure = SimilarityMeasures.EuclideanDistance;
+	protected SimilarityMeasures measure = SimilarityMeasures.EUCLIDEAN;
 
 	@Ignore
 	protected CrossoverRateType crossoverRateType = CrossoverRateType.CONSTANT;
@@ -105,11 +105,11 @@ public class MOEADModule extends OptimizerModule {
 		/**
 		 * Use {@link EuclideanDistance} .
 		 */
-		EuclideanDistance,
+		EUCLIDEAN,
 		/**
 		 * Use {@link CosineSimilarity}.
 		 */
-		CosineSimilarity;
+		COSINE;
 	}
 
 

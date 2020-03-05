@@ -52,15 +52,12 @@ public class NeighborhoodCreation {
      * @param sm
      */
     public void setSimilarityMeasure(SimilarityMeasures measure){
-		switch (measure) {
-		case CosineSimilarity:
+		if(measure == SimilarityMeasures.COSINE) {
             this.sm = new CosineSimilarity();
-			break;
-		default: // EuclideanDistance
+        }
+		else{ // EuclideanDistance
             this.sm = new EuclideanDistance();
-			break;
-		}
-
+        };
     }
 
     /**

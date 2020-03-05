@@ -23,6 +23,7 @@
 package org.opt4j.optimizers.ea.moead;
 
 import static org.junit.Assert.assertArrayEquals;
+import org.opt4j.optimizers.ea.moead.MOEADModule.SimilarityMeasures;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -48,6 +49,7 @@ public class NeighborhoodCreationTest {
                     candidates.add(new WeightVector(new double[] { i, j }));
 
         NeighborhoodCreation c = new NeighborhoodCreation();
+        c.setSimilarityMeasure(SimilarityMeasures.EUCLIDEAN);
         int[] actual = c.create(v, candidates, neighborhoodSize);
         int[] expected = { 1, 3, 4, 6 };
         assertArrayEquals(expected, actual);
@@ -70,7 +72,8 @@ public class NeighborhoodCreationTest {
                 if (!(i == 2 && j == 2))
                     candidates.add(new WeightVector(new double[] { i, j }));
 
-        NeighborhoodCreation c = new NeighborhoodCreation(new CosineSimilarity());
+        NeighborhoodCreation c = new NeighborhoodCreation();
+        c.setSimilarityMeasure(SimilarityMeasures.COSINE);
         int[] actual = c.create(v, candidates, neighborhoodSize);
         int[] expected = {7, 0, 4, 6};
         assertArrayEquals(expected, actual);
