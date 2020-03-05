@@ -32,19 +32,19 @@ import com.google.inject.Inject;
  * @author Christian Vögl
 */
 public class DecompositionDefault implements Decomposition {
+    private int overfill;
 
-    // controlls how many Vectors to create with the SimplexFill for each Vector
-    // that gets selected by the selection
-    protected  int overfill = 10;
-    @Override
 /**
  * @param numProblems
  *            the number of subproblems (number of weight vectors)
  * @param numObjectives
  *            the numbe of objectives (number of entries per weight vector)
+ * @param overfill
+              controlls how many WeightVectors are randomly generated per selected WeightVector
  * @return the weight vectors
  */
-    public List<WeightVector> decompose (int numProblems, int numObjectives)
+    @Override
+    public List<WeightVector> decompose (int numProblems, int numObjectives, int overfill)
     {
         SimplexFill fill = new SimplexFillRandom();
         List<WeightVector> initial = fill.fill(overfill*numProblems, numObjectives);

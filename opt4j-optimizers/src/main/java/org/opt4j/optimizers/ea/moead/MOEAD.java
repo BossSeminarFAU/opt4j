@@ -180,7 +180,7 @@ public class MOEAD implements IterativeOptimizer {
 	 */
 	@Override
 	public void initialize() {
-		weights = decomposition.decompose(numProblems, numObjectives); // TODO: Add overfill
+		weights = decomposition.decompose(numProblems, numObjectives, overfill);
 
 		// Step 1.1 create an empty popullation
 		externalPopulation = new UnboundedArchive();
