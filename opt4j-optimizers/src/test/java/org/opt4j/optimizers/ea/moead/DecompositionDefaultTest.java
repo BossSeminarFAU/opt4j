@@ -34,9 +34,9 @@ public class DecompositionDefaultTest {
     @Test
     public void TestZeroSubproblems() {
         Decomposition decomp = new DecompositionDefault();
-        List<WeightVector> vecs = decomp.decompose(0, 0);
+        List<WeightVector> vecs = decomp.decompose(0, 0, 10);
         assertEquals(0, vecs.size());
-        vecs = decomp.decompose(0,17);
+        vecs = decomp.decompose(0, 17, 10);
         assertEquals(0, vecs.size());
     }
 
@@ -44,16 +44,16 @@ public class DecompositionDefaultTest {
     public void TestZeroObjectives()
     {
         Decomposition decomp = new DecompositionDefault();
-        List<WeightVector> vecs = decomp.decompose(1, 0);
+        List<WeightVector> vecs = decomp.decompose(1, 0, 10);
         assertEquals(0, vecs.get(0).size());
-        vecs = decomp.decompose(17, 0);
+        vecs = decomp.decompose(17, 0, 10);
         assertEquals(0, vecs.get(15).size());
     }
     @Test
     public void SingleObjective()
     {
         Decomposition decomp = new DecompositionDefault();
-        List<WeightVector> vecs = decomp.decompose(1, 1);
+        List<WeightVector> vecs = decomp.decompose(1, 1, 10);
         assertEquals(1, vecs.size());
         assertEquals(1, vecs.get(0).size());
         assertEquals(1.0, vecs.get(0).get(0), 2*Math.ulp(1.0));
@@ -62,7 +62,7 @@ public class DecompositionDefaultTest {
     @Test
     public void TwoObjectivesTwoProblems(){
         Decomposition decomp = new DecompositionDefault();
-        List<WeightVector> vecs = decomp.decompose(2, 2);
+        List<WeightVector> vecs = decomp.decompose(2, 2, 10);
         assertEquals(2, vecs.size());
         WeightVector vec1 = vecs.get(0);
         WeightVector vec2 = vecs.get(1);
@@ -80,7 +80,7 @@ public class DecompositionDefaultTest {
     public void TwoObjectivesThreeProblems()
     {
         Decomposition decomp = new DecompositionDefault();
-        List<WeightVector> vecs = decomp.decompose(3,2);
+        List<WeightVector> vecs = decomp.decompose(3, 2, 10);
         assertEquals(3, vecs.size());
         WeightVector middle = null;
         for(int i =0 ; i<3 ; i++)
@@ -116,7 +116,7 @@ public class DecompositionDefaultTest {
     public void TenObjectives(){
         final int count = 350;
         Decomposition decomp = new DecompositionDefault();
-        List<WeightVector> vecs = decomp.decompose(count, 10);
+        List<WeightVector> vecs = decomp.decompose(count, 10, 10);
         assertEquals(count, vecs.size());
         List<WeightVector> extrema = new ArrayList<WeightVector>();
         for(WeightVector vec: vecs)

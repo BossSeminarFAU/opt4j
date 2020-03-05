@@ -43,8 +43,10 @@ public interface Decomposition {
 	 *            the number of subproblems (number of weight vectors)
 	 * @param numObjectives
      *            the number of objectives (number of entries per weight vector)
+     * @param overfill
+              controlls how many WeightVectors are randomly generated per selected WeightVector
 	 * @return the weight vectors
     */
-    public List<WeightVector> decompose (int numProblems, int numObjectives);
+    public List<WeightVector> decompose (int numProblems, int numObjectives, int overfill);
 
 }
