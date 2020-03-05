@@ -36,6 +36,7 @@ import org.opt4j.core.optimizer.Population;
 import org.opt4j.core.optimizer.TerminationException;
 import org.opt4j.core.start.Constant;
 import org.opt4j.optimizers.ea.Mating;
+import org.opt4j.optimizers.ea.moead.MOEADModule.SimilarityMeasures;
 import org.opt4j.core.optimizer.Archive;
 import org.opt4j.core.common.archive.UnboundedArchive;
 
@@ -139,13 +140,15 @@ public class MOEAD implements IterativeOptimizer {
 			@Constant(value = "neighborhoodSize", namespace = MOEAD.class) int neighborhoodSize,
 			@Constant(value = "numberOfParents", namespace = MOEAD.class) int numberOfParents,
 			@Constant(value = "newIndividuals", namespace = MOEAD.class) int newIndividuals, 
-			@Constant(value = "overfill", namespace = MOEAD.class) int overfill) {
+			@Constant(value = "overfill", namespace = MOEAD.class) int overfill,
+			@Constant(value = "measure", namespace = MOEAD.class) SimilarityMeasures measure) {
 		this.selector = selector;
 		this.individualFactory = individualFactory;
 		this.completer = completer;
 		this.mating = mating;
 		this.decomposition = decomposition;
 		this.neighborhoodCreation = neighborhoodCreation;
+		this.neighborhoodCreation.setSimilarityMeasure(measure);
 		this.repair = repair;
 		this.numObjectives = numObjectives;
 		this.numProblems = numProblems;
@@ -154,7 +157,7 @@ public class MOEAD implements IterativeOptimizer {
 		this.newIndividuals = newIndividuals;
 		this.population = population;
 		this.overfill = overfill;
-
+		
 		if (numObjectives <= 0) {
 			throw new IllegalArgumentException("Invalid numObjectives: " + numObjectives);
 		}
@@ -174,7 +177,7 @@ public class MOEAD implements IterativeOptimizer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.opt4j.core.optimizer.IterativeOptimizer#initialize()
 	 * 
 	 */

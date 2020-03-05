@@ -24,6 +24,9 @@ package org.opt4j.optimizers.ea.moead;
 
 import java.util.List;
 import java.util.Map;
+
+import org.opt4j.optimizers.ea.moead.MOEADModule.SimilarityMeasures;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -42,19 +45,22 @@ import static java.util.Map.Entry;
  */
 public class NeighborhoodCreation {
 
-    private final SimilarityMeasure sm;
+    private SimilarityMeasure sm;
 
-    public NeighborhoodCreation() {
-        sm = new EuclideanDistance();
-    }
-
-
-     /**
+    /**
+     * Sets the {@link SimilarityMeasure} to be used
      * @param sm
-     *      the {@link SimilarityMeasure} to be used
      */
-    public NeighborhoodCreation(SimilarityMeasure sm) {
-        this.sm = sm;
+    public void setSimilarityMeasure(SimilarityMeasures measure){
+		switch (measure) {
+		case CosineSimilarity:
+            this.sm = new CosineSimilarity();
+			break;
+		default: // EuclideanDistance
+            this.sm = new EuclideanDistance();
+			break;
+		}
+
     }
 
     /**

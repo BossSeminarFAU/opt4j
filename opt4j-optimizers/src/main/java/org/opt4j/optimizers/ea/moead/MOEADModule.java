@@ -34,8 +34,7 @@ import org.opt4j.optimizers.ea.EvolutionaryAlgorithmModule.CrossoverRateType;
 import org.opt4j.optimizers.ea.ConstantCrossoverRate;
 
 /**
- * The {@link MOEADModule} configures the
- * {@link MOEAD}.
+ * The {@link MOEADModule} configures the {@link MOEAD}.
  * 
  * @author Johannes-Sebastian See
  * 
@@ -73,20 +72,43 @@ public class MOEADModule extends OptimizerModule {
 	@Info("The number of new solutions per iteration")
 	@Order(5)
 	protected int newIndividuals = 1;
-	
+
 	@Constant(value = "overfill", namespace = MOEAD.class)
 	@Info("TODO")
 	@Order(5)
 	protected int overfill = 10;
 
+	@Constant(value = "rate", namespace = ConstantCrossoverRate.class)
 	@Info("Performs a crossover operation with this given rate.")
 	@Order(7)
-	@Constant(value = "rate", namespace = ConstantCrossoverRate.class)
 	protected double crossoverRate = 0.95;
 
 	
+	@Constant(value = "measure", namespace = MOEAD.class)
+	@Info("The used measures for determination of the neighborhood.")
+	@Order(8)
+	protected SimilarityMeasures measure = SimilarityMeasures.EuclideanDistance;
+
 	@Ignore
 	protected CrossoverRateType crossoverRateType = CrossoverRateType.CONSTANT;
+
+	/**
+	 * The used {@link SimilarityMeasure} .
+	 * 
+	 * @author Kai Amann
+	 */
+	public enum SimilarityMeasures {
+		/**
+		 * Use {@link EuclideanDistance} .
+		 */
+		EuclideanDistance,
+		/**
+		 * Use {@link CosineSimilarity}.
+		 */
+		CosineSimilarity;
+	}
+
+
 
 	/**
 	 * Returns the number of generations.
@@ -101,8 +123,7 @@ public class MOEADModule extends OptimizerModule {
 	 * Sets the number of generations.
 	 * 
 	 * @see #getGenerations
-	 * @param generations
-	 *            the number of generations
+	 * @param generations the number of generations
 	 */
 	public void setGenerations(int generations) {
 		this.generations = generations;
@@ -120,13 +141,12 @@ public class MOEADModule extends OptimizerModule {
 	/**
 	 * Sets the number of objectives per subproblem {@code numObjectives}.
 	 * 
-	 * @param numObjectives
-	 *            The number of objectives per subproblem
+	 * @param numObjectives The number of objectives per subproblem
 	 */
 	public void setNumObjectives(int numObjectives) {
 		this.numObjectives = numObjectives;
 	}
-	
+
 	/**
 	 * Returns the number of subproblems.
 	 * 
@@ -145,8 +165,6 @@ public class MOEADModule extends OptimizerModule {
 		this.numProblems = numProblems;
 	}
 
-	
-
 	/**
 	 * Returns The number of the weight vectors in the neighborhood {@code T}.
 	 * 
@@ -159,15 +177,15 @@ public class MOEADModule extends OptimizerModule {
 	/**
 	 * Sets the number of weight vectors {@code T}.
 	 * 
-	 * @param neighborhoodSize
-	 *            The number of the weight vectors
+	 * @param neighborhoodSize The number of the weight vectors
 	 */
 	public void setNeighborhoodSize(int neighborhoodSize) {
 		this.neighborhoodSize = neighborhoodSize;
 	}
 
 	/**
-	 * Returns the number of parents from which to create new individuals {@code numberOfParents}.
+	 * Returns the number of parents from which to create new individuals
+	 * {@code numberOfParents}.
 	 * 
 	 * @return the number of parents
 	 */
@@ -176,10 +194,10 @@ public class MOEADModule extends OptimizerModule {
 	}
 
 	/**
-	 * Sets the number of parents from which to create new individuals {@code numberOfParents}.
+	 * Sets the number of parents from which to create new individuals
+	 * {@code numberOfParents}.
 	 * 
-	 * @param newIndividuals
-	 *            The number of new Individuals per iteration
+	 * @param newIndividuals The number of new Individuals per iteration
 	 */
 	public void setNumberOfParents(int numberOfParents) {
 		this.numberOfParents = numberOfParents;
@@ -197,8 +215,7 @@ public class MOEADModule extends OptimizerModule {
 	/**
 	 * Sets the number of new individuals per iteration {@code newIndividuals}.
 	 * 
-	 * @param newIndividuals
-	 *            The number of new Individuals per iteration
+	 * @param newIndividuals The number of new Individuals per iteration
 	 */
 	public void setnewIndividuals(int newIndividuals) {
 		this.newIndividuals = newIndividuals;
@@ -216,13 +233,12 @@ public class MOEADModule extends OptimizerModule {
 	/**
 	 * Sets the overfill {@code newIndividuals}.
 	 * 
-	 * @param newIndividuals
-	 *            The overfill
+	 * @param newIndividuals The overfill
 	 */
 	public void setoverfill(int overfill) {
 		this.overfill = overfill;
 	}
-	
+
 	/**
 	 * Returns the type of crossover rate that is used.
 	 * 
@@ -235,8 +251,7 @@ public class MOEADModule extends OptimizerModule {
 	/**
 	 * Sets the type of crossover rate to use.
 	 * 
-	 * @param crossoverRateType
-	 *            the crossoverRateType to set
+	 * @param crossoverRateType the crossoverRateType to set
 	 */
 	public void setCrossoverRateType(CrossoverRateType crossoverRateType) {
 		this.crossoverRateType = crossoverRateType;
@@ -254,11 +269,28 @@ public class MOEADModule extends OptimizerModule {
 	/**
 	 * Sets the crossover rate.
 	 * 
-	 * @param crossoverRate
-	 *            the crossoverRate to set
+	 * @param crossoverRate the crossoverRate to set
 	 */
 	public void setCrossoverRate(double crossoverRate) {
 		this.crossoverRate = crossoverRate;
+	}
+
+	/**
+	 * Returns the encoding (double or binary).
+	 * 
+	 * @return the encoding
+	 */
+	public SimilarityMeasures getMeasure() {
+		return measure;
+	}
+
+	/**
+	 * Set the encoding (double or binary).
+	 * 
+	 * @param encoding the encoding
+	 */
+	public void setMeasure(SimilarityMeasures m) {
+		this.measure = m;
 	}
 
 	/*
