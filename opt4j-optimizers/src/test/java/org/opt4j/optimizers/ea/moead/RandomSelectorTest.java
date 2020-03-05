@@ -2,13 +2,11 @@ package org.opt4j.optimizers.ea.moead;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
-import java.lang.Math;
 import java.util.List;
 
 public class RandomSelectorTest {
@@ -87,11 +85,10 @@ public class RandomSelectorTest {
 	@Test
 	public void testSelectParentsWithNeighbourhoodSizeSmallerParentsSize() {
 		int[] neighbourhood = new int[] { 1, 2 };
-		List<Integer> result;
 
 		RandomSelector rs = new RandomSelector();
 		thrown.expect(IllegalArgumentException.class);
-		result = rs.selectParents(neighbourhood, 3);
+		rs.selectParents(neighbourhood, 3);
 	}
 
 	@Test

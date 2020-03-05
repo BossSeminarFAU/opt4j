@@ -81,7 +81,7 @@ public class NeighborhoodCreationTest {
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void NeighborhoodSizeTestGreaterNumCandidates() {
+    public void NeighborhoodSizeGreaterNumCandidatesTest() {
         int neighborhoodSize = 4;
         WeightVector v = new WeightVector(new double[] { 1, 1 });
         List<WeightVector> candidates = new LinkedList<WeightVector>();
@@ -108,7 +108,7 @@ public class NeighborhoodCreationTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void WeightVectorEqNull() {
+    public void WeightVectorEqNullTest() {
         int neighborhoodSize = 0;
         WeightVector v = null;
         List<WeightVector> candidates = new LinkedList<WeightVector>();

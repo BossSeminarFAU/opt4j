@@ -24,8 +24,6 @@ package org.opt4j.optimizers.ea.moead;
 
 import java.util.List;
 
-import org.opt4j.optimizers.ea.moead.WeightVector;
-
 import com.google.inject.ImplementedBy;
 
 
