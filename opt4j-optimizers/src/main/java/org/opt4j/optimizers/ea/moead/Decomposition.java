@@ -24,13 +24,11 @@ package org.opt4j.optimizers.ea.moead;
 
 import java.util.List;
 
-import org.opt4j.optimizers.ea.moead.WeightVector;
-
 import com.google.inject.ImplementedBy;
 
 
 /**
- * The {@link Decompostition} interface is used to create weight vectors.
+ * The {@link Decomposition} interface is used to create weight vectors.
  *
  * @author Christian Vögl
  *
@@ -43,8 +41,10 @@ public interface Decomposition {
 	 *            the number of subproblems (number of weight vectors)
 	 * @param numObjectives
      *            the number of objectives (number of entries per weight vector)
+     * @param overfill
+              controls how many WeightVectors are randomly generated per selected WeightVector
 	 * @return the weight vectors
     */
-    public List<WeightVector> decompose (int numProblems, int numObjectives);
+    public List<WeightVector> decompose (int numProblems, int numObjectives, int overfill);
 
 }

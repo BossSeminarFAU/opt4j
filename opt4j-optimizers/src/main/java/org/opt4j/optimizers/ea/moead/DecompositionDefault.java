@@ -22,32 +22,31 @@
 package org.opt4j.optimizers.ea.moead;
 
 import java.util.List;
-import com.google.inject.Inject;
 
 /**
- * The default implementation for the Decomposition interface
- * As default we use a MSS-R selection.
- * (Deb K., Bandaru S., Seada H. (2019) Generating Uniformly Distributed Points on a Unit Simplex for Evolutionary Many-Objective Optimization.
- *  In: Deb K. et al. (eds) Evolutionary Multi-Criterion Optimization. EMO 2019. Lecture Notes in Computer Science, vol 11411. Springer, Cham)
+ * The default implementation for the Decomposition interface As default we use
+ * a MSS-R selection. (Deb K., Bandaru S., Seada H. (2019) Generating Uniformly
+ * Distributed Points on a Unit Simplex for Evolutionary Many-Objective
+ * Optimization. In: Deb K. et al. (eds) Evolutionary Multi-Criterion
+ * Optimization. EMO 2019. Lecture Notes in Computer Science, vol 11411.
+ * Springer, Cham)
+ * 
  * @author Christian Vögl
-*/
+ */
 public class DecompositionDefault implements Decomposition {
 
-    // controlls how many Vectors to create with the SimplexFill for each Vector
-    // that gets selected by the selection
-    protected  int overfill = 10;
+    /**
+     * @param numProblems   the number of subproblems (number of weight vectors)
+     * @param numObjectives the numbe of objectives (number of entries per weight
+     *                      vector)
+     * @param overfill      controlls how many WeightVectors are randomly generated
+     *                      per selected WeightVector
+     * @return the weight vectors
+     */
     @Override
-/**
- * @param numProblems
- *            the number of subproblems (number of weight vectors)
- * @param numObjectives
- *            the numbe of objectives (number of entries per weight vector)
- * @return the weight vectors
- */
-    public List<WeightVector> decompose (int numProblems, int numObjectives)
-    {
+    public List<WeightVector> decompose(int numProblems, int numObjectives, int overfill) {
         SimplexFill fill = new SimplexFillRandom();
-        List<WeightVector> initial = fill.fill(overfill*numProblems, numObjectives);
+        List<WeightVector> initial = fill.fill(overfill * numProblems, numObjectives);
         Selection select = new MaximallySparseSelection();
         return select.select(initial, numProblems);
     }

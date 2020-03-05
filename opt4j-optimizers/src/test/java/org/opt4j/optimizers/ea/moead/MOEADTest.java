@@ -40,6 +40,7 @@ import org.opt4j.core.optimizer.IndividualCompleter;
 import org.opt4j.core.optimizer.Population;
 import org.opt4j.core.optimizer.TerminationException;
 import org.opt4j.optimizers.ea.Mating;
+import org.opt4j.optimizers.ea.moead.MOEADModule.SimilarityMeasures;
 
 public class MOEADTest {
 
@@ -95,7 +96,7 @@ public class MOEADTest {
         List<WeightVector> wlist = new ArrayList<>(numProblems);
         for(int j = 0; j < numProblems; j++)
                 wlist.add(w);
-        when(decomposition.decompose(anyInt(), anyInt())).thenReturn(wlist);
+        when(decomposition.decompose(anyInt(), anyInt(), anyInt())).thenReturn(wlist);
 
         neighborhoodCreation = mock(NeighborhoodCreation.class);
         when(neighborhoodCreation.create(any(WeightVector.class), anyList(), anyInt()))
@@ -106,19 +107,19 @@ public class MOEADTest {
 
         return new MOEAD(population, individualFactory, completer, selector, mating, decomposition,
                 neighborhoodCreation, repair, numObjectives, numProblems, neighborhoodSize, numberOfParents,
-                newIndividuals, overfill);
+                newIndividuals, overfill, SimilarityMeasures.EUCLIDEAN);
     }
 
     @Test
     public void testInitialize() throws TerminationException {
-        MOEAD moead = createMOEAD(5, 30, 10, 2, 1, 0);
+        MOEAD moead = createMOEAD(5, 30, 10, 2, 1, 10);
 
         moead.initialize();
     }
 
     @Test
     public void testNext() throws TerminationException {
-        MOEAD moead = createMOEAD(5, 30, 10, 2, 2, 0);
+        MOEAD moead = createMOEAD(5, 30, 10, 2, 2, 10);
 
         moead.initialize();
         moead.next();
@@ -126,31 +127,37 @@ public class MOEADTest {
     @Test
     public void testNumObjectives() {
         thrown.expect(IllegalArgumentException.class);
-        createMOEAD(0, 30, 10, 2, 1, 0);
+        createMOEAD(0, 30, 10, 2, 1, 10);
     }
 
     @Test
     public void testNumProblems() {
         thrown.expect(IllegalArgumentException.class);
-        createMOEAD(5, 0, 10, 2, 1, 0);
+        createMOEAD(5, 0, 10, 2, 1, 10);
     }
 
     @Test
     public void testNeighborhoodSize() {
         thrown.expect(IllegalArgumentException.class);
-        createMOEAD(5, 30, 0, 2, 1, 0);
+        createMOEAD(5, 30, 0, 2, 1, 10);
     }
 
     @Test
     public void testNumberOfParents() {
         thrown.expect(IllegalArgumentException.class);
-        createMOEAD(5, 30, 10, 0, 1, 0);
+        createMOEAD(5, 30, 10, 0, 1, 10);
     }
 
     @Test
     public void testNewIndividuals() {
         thrown.expect(IllegalArgumentException.class);
-        createMOEAD(5, 30, 10, 2, 0, 0);
+        createMOEAD(5, 30, 10, 2, 0, 10);
+    }
+
+    @Test
+    public void testOverfill() {
+        thrown.expect(IllegalArgumentException.class);
+        createMOEAD(5, 30, 10, 2, 1, 0);
     }
 
 }

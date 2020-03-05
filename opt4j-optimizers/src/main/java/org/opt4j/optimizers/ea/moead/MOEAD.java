@@ -36,6 +36,7 @@ import org.opt4j.core.optimizer.Population;
 import org.opt4j.core.optimizer.TerminationException;
 import org.opt4j.core.start.Constant;
 import org.opt4j.optimizers.ea.Mating;
+import org.opt4j.optimizers.ea.moead.MOEADModule.SimilarityMeasures;
 import org.opt4j.core.optimizer.Archive;
 import org.opt4j.core.common.archive.UnboundedArchive;
 
@@ -48,7 +49,7 @@ import com.google.inject.Inject;
  * Algorithm Based on Decomposition" written by Qingfu Zhang and Hui Li.
  * 
  * @author Johannes-Sebastian See
- * 
+ *
  */
 public class MOEAD implements IterativeOptimizer {
 
@@ -91,29 +92,42 @@ public class MOEAD implements IterativeOptimizer {
 	protected Individual[] x;
 
 	/**
-	 * Constructs an {@link MultiObjectiveEvolutionaryAlgorithm} with a
-	 * {@link Population}, a {@link Selector}, a {@link mating}, a
-	 * {@link decomposition}, a {@link repait}, the number of generations, the
-	 * number of objective functions per subproblem, the number of subproblems, the
-	 * number of wiehgt vectors in the neighborhood, and the number of new
-	 * Individuals per iteration.
-	 * 
-	 * @param population           the population
-	 * @param individualFactory    the individual factory
-	 * @param completer            the completer
-	 * @param selector             the selector
-	 * @param mating               the mating method
-	 * @param decomposition        the decomposition method
-	 * @param neighborhoodCreation the neighborhood-creation method
-	 * @param repair               the repair method
-	 * @param numObjectives        the number of objective functions and entries of
-	 *                             a weight vector
-	 * @param numProblems          the number of subproblems
-	 * @param neighborhoodSize     the number of weight vectors in the neighborhood
-	 * @param numberOfParents      the number of parents from which to create new
-	 *                             individuals
-	 * @param newIndividuals       the number of new Individuals created by the
-	 *                             mating method
+	 * Constructs an {@link MOEAD} with a
+	 * {@link Population}, a {@link Selector}, a {@link Mating}, a
+	 * {@link Decomposition}, a {@link Repair}, the number of generations, the
+	 * number of objective functions per subproblem, the number of subproblems, the number of wiehgt vectors in the neighborhood,
+	 * and the number of new Individuals per iteration.
+	 *
+	 * @param population
+	 *            the population
+	 * @param individualFactory
+	 *            the individual factory
+	 * @param completer
+	 *            the completer
+	 * @param selector
+	 *            the selector
+	 * @param mating
+	 *            the mating method
+	 * @param decomposition
+	 * 			  the decomposition method
+	 * @param neighborhoodCreation
+	 * 			  the neighborhood-creation method
+	 * @param repair
+	 * 			  the repair method
+	 * @param numObjectives
+	 * 			  the number of objective functions	and entries of a weight vector
+	 * @param numProblems
+	 *            the number of subproblems
+	 * @param neighborhoodSize
+	 *            the number of weight vectors in the neighborhood
+	 * @param numberOfParents
+	 * 			  the number of parents from which to create new individuals
+	 * @param newIndividuals
+	 * 			  the number of new Individuals created by the mating method
+	 * @param measure
+	 * 			  the measuring method used to create neighborhood
+	 * @param overfill
+	 * 			  controls the number of WeightVectors that are randomly generated per selected WeightVector 			  
 	 */
 	@Inject
 	public MOEAD(Population population, IndividualFactory individualFactory, IndividualCompleter completer,
@@ -122,14 +136,16 @@ public class MOEAD implements IterativeOptimizer {
 			@Constant(value = "numProblems", namespace = MOEAD.class) int numProblems,
 			@Constant(value = "neighborhoodSize", namespace = MOEAD.class) int neighborhoodSize,
 			@Constant(value = "numberOfParents", namespace = MOEAD.class) int numberOfParents,
-			@Constant(value = "newIndividuals", namespace = MOEAD.class) int newIndividuals,
-			@Constant(value = "overfill", namespace = MOEAD.class) int overfill) {
+			@Constant(value = "newIndividuals", namespace = MOEAD.class) int newIndividuals, 
+			@Constant(value = "overfill", namespace = MOEAD.class) int overfill,
+			@Constant(value = "measure", namespace = MOEAD.class) SimilarityMeasures measure) {
 		this.selector = selector;
 		this.individualFactory = individualFactory;
 		this.completer = completer;
 		this.mating = mating;
 		this.decomposition = decomposition;
 		this.neighborhoodCreation = neighborhoodCreation;
+		this.neighborhoodCreation.setSimilarityMeasure(measure);
 		this.repair = repair;
 		this.numObjectives = numObjectives;
 		this.numProblems = numProblems;
@@ -138,7 +154,7 @@ public class MOEAD implements IterativeOptimizer {
 		this.newIndividuals = newIndividuals;
 		this.population = population;
 		this.overfill = overfill;
-
+		
 		if (numObjectives <= 0) {
 			throw new IllegalArgumentException("Invalid numObjectives: " + numObjectives);
 		}
@@ -154,17 +170,20 @@ public class MOEAD implements IterativeOptimizer {
 		if (numberOfParents < 1) {
 			throw new IllegalArgumentException("Invalid numberOfParents: " + numberOfParents);
 		}
+		if (overfill < 1) {
+			throw new IllegalArgumentException("Invalid overfill: " + overfill);
+		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.opt4j.core.optimizer.IterativeOptimizer#initialize()
-	 * 
+	 *
 	 */
 	@Override
 	public void initialize() {
-		weights = decomposition.decompose(numProblems, numObjectives); // TODO: Add overfill
+		weights = decomposition.decompose(numProblems, numObjectives, overfill);
 
 		// Step 1.1 create an empty popullation
 		externalPopulation = new UnboundedArchive();
@@ -186,7 +205,7 @@ public class MOEAD implements IterativeOptimizer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.opt4j.core.optimizer.IterativeOptimizer#next()
 	 */
 	@Override

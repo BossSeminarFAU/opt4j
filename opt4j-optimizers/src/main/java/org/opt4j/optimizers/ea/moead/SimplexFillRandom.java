@@ -22,7 +22,6 @@
 
 package org.opt4j.optimizers.ea.moead;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

@@ -34,8 +34,8 @@ public class CosineSimilarity implements SimilarityMeasure {
 
     /**
      * Computes the similarity of two {@link WeightVector}s.
-     * Assumes that orthogonal vectors (=> cos(v1,v2) = 0) are the least similar to each other.
-     * Conversely vectors which point into the same  or opposite direction (=> |cos(v1,v2)| = 1) are the most similar.
+     * Assumes that orthogonal vectors ( cos(v1,v2) = 0) are the least similar to each other.
+     * Conversely vectors which point into the same  or opposite direction ( |cos(v1,v2)| = 1) are the most similar.
      * 
      * 
      * @param v1 the first {@link WeightVector}

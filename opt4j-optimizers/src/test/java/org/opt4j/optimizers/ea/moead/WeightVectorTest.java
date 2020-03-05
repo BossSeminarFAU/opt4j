@@ -35,7 +35,7 @@ public class WeightVectorTest {
 	@Test
 	public void testFaultyConstructor() {
 		thrown.expect(IllegalArgumentException.class);
-		WeightVector vec0 = new WeightVector(null);
+		new WeightVector(null);
 	}
 
 	@Test
