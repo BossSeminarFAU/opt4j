@@ -22,7 +22,10 @@
 
 package org.opt4j.optimizers.ea.moead;
 
+import static org.opt4j.core.config.annotations.Citation.PublicationMonth.DECEMBER;;
+
 import org.opt4j.core.config.annotations.Info;
+import org.opt4j.core.config.annotations.Citation;
 import org.opt4j.core.config.annotations.Ignore;
 import org.opt4j.core.config.annotations.Order;
 import org.opt4j.core.optimizer.MaxIterations;
@@ -41,6 +44,7 @@ import org.opt4j.optimizers.ea.ConstantCrossoverRate;
  */
 
 @Info("Multi-Objective Evolutionary Algorithm")
+@Citation(authors = "Q. Zhang and H. Li", title = "MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition", journal = "IEEE Transactions on Evolutionary Computation", volume = 11, number = 6, pageFirst = 712, pageLast = 731, month = DECEMBER, year = 2007)
 public class MOEADModule extends OptimizerModule {
 
 	@Info("The number of generations.")
@@ -85,7 +89,7 @@ public class MOEADModule extends OptimizerModule {
 
 	
 	@Constant(value = "measure", namespace = MOEAD.class)
-	@Info("The used measures for determination of the neighborhood.")
+	@Info("The measure for finding neighboring vectors.")
 	@Order(8)
 	protected SimilarityMeasures measure = SimilarityMeasures.EuclideanDistance;
 
