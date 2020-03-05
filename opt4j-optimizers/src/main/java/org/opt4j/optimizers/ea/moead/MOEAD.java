@@ -139,14 +139,9 @@ public class MOEAD implements IterativeOptimizer {
 			@Constant(value = "numProblems", namespace = MOEAD.class) int numProblems,
 			@Constant(value = "neighborhoodSize", namespace = MOEAD.class) int neighborhoodSize,
 			@Constant(value = "numberOfParents", namespace = MOEAD.class) int numberOfParents,
-<<<<<<< HEAD
 			@Constant(value = "newIndividuals", namespace = MOEAD.class) int newIndividuals, 
 			@Constant(value = "overfill", namespace = MOEAD.class) int overfill,
 			@Constant(value = "measure", namespace = MOEAD.class) SimilarityMeasures measure) {
-=======
-			@Constant(value = "newIndividuals", namespace = MOEAD.class) int newIndividuals,
-			@Constant(value = "overfill", namespace = MOEAD.class) int overfill) {
->>>>>>> 70b18f310c63cd369d7e8e74afffe75622a27513
 		this.selector = selector;
 		this.individualFactory = individualFactory;
 		this.completer = completer;
