@@ -34,13 +34,15 @@ def snapshotURL = 'https://oss.sonatype.org/content/repositories/snapshots/'
 ext {
 	dateISO = new Date().format("yyyy-MM-dd")
 }
+repositories { jcenter() }
+dependencies { testCompile "org.mockito:mockito-core:2.+" }
 
 allprojects {
     group = 'org.opt4j'
    
     repositories {
     	mavenCentral()
-    }
+	    }
     
     configurations {
          deployerJars

@@ -42,10 +42,10 @@ import org.opt4j.core.common.archive.UnboundedArchive;
 import com.google.inject.Inject;
 
 /**
- * The {@link MOEAD} is an implementation of an Evolutionary
- * Algorithm that uses {@link Decomposition} on a Multiobjective optimization Problem.
- * It is based on the ideas introduced in the paper 
- * "MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition" written by Qingfu Zhang and Hui Li.
+ * The {@link MOEAD} is an implementation of an Evolutionary Algorithm that uses
+ * {@link Decomposition} on a Multiobjective optimization Problem. It is based
+ * on the ideas introduced in the paper "MOEA/D: A Multiobjective Evolutionary
+ * Algorithm Based on Decomposition" written by Qingfu Zhang and Hui Li.
  * 
  * @author Johannes-Sebastian See
  * 
@@ -61,7 +61,7 @@ public class MOEAD implements IterativeOptimizer {
 	protected final int numberOfParents;
 
 	protected final int newIndividuals;
-	
+
 	protected final int overfill;
 
 	private final IndividualFactory individualFactory;
@@ -77,68 +77,52 @@ public class MOEAD implements IterativeOptimizer {
 	protected final NeighborhoodCreation neighborhoodCreation;
 
 	private final Population population;
-	
-	private final Repair repair; 
+
+	private final Repair repair;
 
 	protected List<WeightVector> weights;
-	
-	protected List<int []> neighborhoods;
+
+	protected List<int[]> neighborhoods;
 
 	protected Archive externalPopulation;
 
 	protected double[] referencePoints;
-	
+
 	protected Individual[] x;
 
 	/**
-	 * Constructs an {@link MultiObjectiveEvolutionaryAlgorithm} with a {@link Population}, a
-	 * {@link Selector}, a {@link mating}, a
+	 * Constructs an {@link MultiObjectiveEvolutionaryAlgorithm} with a
+	 * {@link Population}, a {@link Selector}, a {@link mating}, a
 	 * {@link decomposition}, a {@link repait}, the number of generations, the
-	 * number of objective functions per subproblem, the number of subproblems, the number of wiehgt vectors in the neighborhood, 
-	 * and the number of new Individuals per iteration.
+	 * number of objective functions per subproblem, the number of subproblems, the
+	 * number of wiehgt vectors in the neighborhood, and the number of new
+	 * Individuals per iteration.
 	 * 
-	 * @param population
-	 *            the population
-	 * @param individualFactory
-	 *            the individual factory
-	 * @param completer
-	 *            the completer
-	 * @param selector
-	 *            the selector
-	 * @param mating
-	 *            the mating method
-	 * @param decomposition
-	 * 			  the decomposition method
-	 * @param neighborhoodCreation
-	 * 			  the neighborhood-creation method
-	 * @param repair
-	 * 			  the repair method
-	 * @param numObjectives
-	 * 			  the number of objective functions	and entries of a weight vector
-	 * @param numProblems
-	 *            the number of subproblems
-	 * @param neighborhoodSize
-	 *            the number of weight vectors in the neighborhood
-	 * @param numberOfParents
-	 * 			  the number of parents from which to create new individuals
-	 * @param newIndividuals
-	 * 			  the number of new Individuals created by the mating method
+	 * @param population           the population
+	 * @param individualFactory    the individual factory
+	 * @param completer            the completer
+	 * @param selector             the selector
+	 * @param mating               the mating method
+	 * @param decomposition        the decomposition method
+	 * @param neighborhoodCreation the neighborhood-creation method
+	 * @param repair               the repair method
+	 * @param numObjectives        the number of objective functions and entries of
+	 *                             a weight vector
+	 * @param numProblems          the number of subproblems
+	 * @param neighborhoodSize     the number of weight vectors in the neighborhood
+	 * @param numberOfParents      the number of parents from which to create new
+	 *                             individuals
+	 * @param newIndividuals       the number of new Individuals created by the
+	 *                             mating method
 	 */
 	@Inject
-	public MOEAD(
-			Population population,
-			IndividualFactory individualFactory,
-			IndividualCompleter completer,
-			Selector selector,
-			Mating mating,
-			Decomposition decomposition,
-			NeighborhoodCreation neighborhoodCreation,
-			Repair repair,
-			@Constant(value = "numObjectives", namespace = MOEAD.class) int numObjectives,
+	public MOEAD(Population population, IndividualFactory individualFactory, IndividualCompleter completer,
+			Selector selector, Mating mating, Decomposition decomposition, NeighborhoodCreation neighborhoodCreation,
+			Repair repair, @Constant(value = "numObjectives", namespace = MOEAD.class) int numObjectives,
 			@Constant(value = "numProblems", namespace = MOEAD.class) int numProblems,
 			@Constant(value = "neighborhoodSize", namespace = MOEAD.class) int neighborhoodSize,
 			@Constant(value = "numberOfParents", namespace = MOEAD.class) int numberOfParents,
-			@Constant(value = "newIndividuals", namespace = MOEAD.class) int newIndividuals, 
+			@Constant(value = "newIndividuals", namespace = MOEAD.class) int newIndividuals,
 			@Constant(value = "overfill", namespace = MOEAD.class) int overfill) {
 		this.selector = selector;
 		this.individualFactory = individualFactory;
@@ -167,8 +151,8 @@ public class MOEAD implements IterativeOptimizer {
 		if (newIndividuals <= 0) {
 			throw new IllegalArgumentException("Invalid newIndividuals: " + newIndividuals);
 		}
-		if(numberOfParents < 1){
-			throw new IllegalArgumentException("Invalid numberOfParents: " + numberOfParents);	
+		if (numberOfParents < 1) {
+			throw new IllegalArgumentException("Invalid numberOfParents: " + numberOfParents);
 		}
 	}
 
@@ -181,13 +165,13 @@ public class MOEAD implements IterativeOptimizer {
 	@Override
 	public void initialize() {
 		weights = decomposition.decompose(numProblems, numObjectives); // TODO: Add overfill
-		
+
 		// Step 1.1 create an empty popullation
 		externalPopulation = new UnboundedArchive();
 
 		// Step 1.2 create neighborhoods
 		neighborhoods = new ArrayList<>(numProblems);
-		for( int i = 0; i < numProblems; i++){
+		for (int i = 0; i < numProblems; i++) {
 			neighborhoods.add(neighborhoodCreation.create(weights.get(i), weights, neighborhoodSize));
 		}
 
@@ -195,9 +179,9 @@ public class MOEAD implements IterativeOptimizer {
 		while (population.size() < numProblems) {
 			population.add(individualFactory.create());
 		}
-			
+
 		x = new Individual[numProblems];
-		x = population.toArray(x);		
+		x = population.toArray(x);
 	}
 
 	/*
@@ -210,28 +194,28 @@ public class MOEAD implements IterativeOptimizer {
 		// Evaluate the population
 		completer.complete(population);
 		// create a new individual for every neighborhood
-		for( int i = 0; i < numProblems; i++) {
+		for (int i = 0; i < numProblems; i++) {
 			// Step 2.1) Reproduction
 			// Select random parents from current neighborhood
 			List<Integer> parents = selector.selectParents(neighborhoods.get(i), numberOfParents);
 			List<Individual> parentCollection = new ArrayList<>(parents.size());
-			for(int j = 0; j < parents.size(); j++){
+			for (int j = 0; j < parents.size(); j++) {
 				parentCollection.add(x[parents.get(j)]);
 			}
-			
+
 			// Create new individuals from the chosen parents
-			Collection<Individual> offspring = mating.getOffspring( newIndividuals , parentCollection);
+			Collection<Individual> offspring = mating.getOffspring(newIndividuals, parentCollection);
 			completer.complete(offspring);
 			Iterator<Individual> iter = offspring.iterator();
 			Individual best = iter.next();
-			
+
 			// find the best offspring
-			while(iter.hasNext()){
+			while (iter.hasNext()) {
 				Individual toCheck = iter.next();
-				if(toCheck.getObjectives().weaklyDominates(best.getObjectives()))
+				if (toCheck.getObjectives().weaklyDominates(best.getObjectives()))
 					best = toCheck;
 			}
-	
+
 			// Step 2.2) Improvement
 			// repair offspring
 			best = repair.repairSolution(best);
@@ -239,11 +223,11 @@ public class MOEAD implements IterativeOptimizer {
 			// Step 2.4) Update of Neighboring Solutions
 			// check if offspring dominates neighboring individuals
 			Objectives objectives = best.getObjectives();
-			for(int j = 0; j < neighborhoodSize; j++){
-				Individual toCheck = x[ neighborhoods.get(i)[j] ];
-				if(objectives.weaklyDominates(toCheck.getObjectives() )){
+			for (int j = 0; j < neighborhoodSize; j++) {
+				Individual toCheck = x[neighborhoods.get(i)[j]];
+				if (objectives.weaklyDominates(toCheck.getObjectives())) {
 					// Update the dominated individuals
-					x[ neighborhoods.get(i)[j] ] = best;
+					x[neighborhoods.get(i)[j]] = best;
 					population.remove(toCheck);
 					population.add(best);
 				}
