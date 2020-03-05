@@ -44,11 +44,11 @@ import com.google.inject.Inject;
 /**
  * The {@link MOEAD} is an implementation of an Evolutionary
  * Algorithm that uses {@link Decomposition} on a Multiobjective optimization Problem.
- * It is based on the ideas introduced in the paper 
+ * It is based on the ideas introduced in the paper
  * "MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition" written by Qingfu Zhang and Hui Li.
- * 
+ *
  * @author Johannes-Sebastian See
- * 
+ *
  */
 public class MOEAD implements IterativeOptimizer {
 
@@ -61,7 +61,7 @@ public class MOEAD implements IterativeOptimizer {
 	protected final int numberOfParents;
 
 	protected final int newIndividuals;
-	
+
 	protected final int overfill;
 
 	private final IndividualFactory individualFactory;
@@ -77,26 +77,26 @@ public class MOEAD implements IterativeOptimizer {
 	protected final NeighborhoodCreation neighborhoodCreation;
 
 	private final Population population;
-	
-	private final Repair repair; 
+
+	private final Repair repair;
 
 	protected List<WeightVector> weights;
-	
+
 	protected List<int []> neighborhoods;
 
 	protected Archive externalPopulation;
 
 	protected double[] referencePoints;
-	
+
 	protected Individual[] x;
 
 	/**
 	 * Constructs an {@link MultiObjectiveEvolutionaryAlgorithm} with a {@link Population}, a
 	 * {@link Selector}, a {@link mating}, a
 	 * {@link decomposition}, a {@link repait}, the number of generations, the
-	 * number of objective functions per subproblem, the number of subproblems, the number of wiehgt vectors in the neighborhood, 
+	 * number of objective functions per subproblem, the number of subproblems, the number of wiehgt vectors in the neighborhood,
 	 * and the number of new Individuals per iteration.
-	 * 
+	 *
 	 * @param population
 	 *            the population
 	 * @param individualFactory
@@ -138,7 +138,7 @@ public class MOEAD implements IterativeOptimizer {
 			@Constant(value = "numProblems", namespace = MOEAD.class) int numProblems,
 			@Constant(value = "neighborhoodSize", namespace = MOEAD.class) int neighborhoodSize,
 			@Constant(value = "numberOfParents", namespace = MOEAD.class) int numberOfParents,
-			@Constant(value = "newIndividuals", namespace = MOEAD.class) int newIndividuals, 
+			@Constant(value = "newIndividuals", namespace = MOEAD.class) int newIndividuals,
 			@Constant(value = "overfill", namespace = MOEAD.class) int overfill) {
 		this.selector = selector;
 		this.individualFactory = individualFactory;
@@ -168,20 +168,20 @@ public class MOEAD implements IterativeOptimizer {
 			throw new IllegalArgumentException("Invalid newIndividuals: " + newIndividuals);
 		}
 		if(numberOfParents < 1){
-			throw new IllegalArgumentException("Invalid numberOfParents: " + numberOfParents);	
+			throw new IllegalArgumentException("Invalid numberOfParents: " + numberOfParents);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.opt4j.core.optimizer.IterativeOptimizer#initialize()
-	 * 
+	 *
 	 */
 	@Override
 	public void initialize() {
 		weights = decomposition.decompose(numProblems, numObjectives); // TODO: Add overfill
-		
+
 		// Step 1.1 create an empty popullation
 		externalPopulation = new UnboundedArchive();
 
@@ -195,14 +195,14 @@ public class MOEAD implements IterativeOptimizer {
 		while (population.size() < numProblems) {
 			population.add(individualFactory.create());
 		}
-			
+
 		x = new Individual[numProblems];
-		x = population.toArray(x);		
+		x = population.toArray(x);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.opt4j.core.optimizer.IterativeOptimizer#next()
 	 */
 	@Override
@@ -218,20 +218,20 @@ public class MOEAD implements IterativeOptimizer {
 			for(int j = 0; j < parents.size(); j++){
 				parentCollection.add(x[parents.get(j)]);
 			}
-			
+
 			// Create new individuals from the chosen parents
 			Collection<Individual> offspring = mating.getOffspring( newIndividuals , parentCollection);
 			completer.complete(offspring);
 			Iterator<Individual> iter = offspring.iterator();
 			Individual best = iter.next();
-			
+
 			// find the best offspring
 			while(iter.hasNext()){
 				Individual toCheck = iter.next();
 				if(toCheck.getObjectives().weaklyDominates(best.getObjectives()))
 					best = toCheck;
 			}
-	
+
 			// Step 2.2) Improvement
 			// repair offspring
 			best = repair.repairSolution(best);
