@@ -6,7 +6,7 @@ apply plugin: 'application'
 apply plugin: 'eclipse'
 apply plugin: 'jacoco'
 jacoco {
-	 toolVersion = "0.8.2"
+	toolVersion = "0.8.2"
 }
 
 mainClassName = 'org.opt4j.core.start.Opt4J'
@@ -34,13 +34,15 @@ def snapshotURL = 'https://oss.sonatype.org/content/repositories/snapshots/'
 ext {
 	dateISO = new Date().format("yyyy-MM-dd")
 }
+repositories { jcenter() }
+dependencies { testCompile "org.mockito:mockito-core:2.+" }
 
 allprojects {
     group = 'org.opt4j'
    
     repositories {
     	mavenCentral()
-    }
+	    }
     
     configurations {
          deployerJars
@@ -67,9 +69,10 @@ subprojects {
     apply plugin: 'signing'
     apply plugin: 'eclipse'
     apply plugin: 'jacoco'
-	jacoco {
-		toolVersion = "0.8.2"
-	}
+    jacoco {
+        toolVersion = "0.8.2"
+    }
+
 
     sourceCompatibility = 1.8 
 	targetCompatibility = 1.8
